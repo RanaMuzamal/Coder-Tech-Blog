@@ -1,28 +1,28 @@
-import React from 'react'
+import React, { useEffect,useState } from 'react'
 import Link from 'next/link'
 import styles from '../styles/Blog.module.css'
 const Blog = () => {
+  const [blog, setblog] = useState([])
+  useEffect(()=>{
+    console.log("usefext")
+    fetch('http://localhost:3000/api/blogs')
+    .then((a)=>{return a.json()}).then((parsed)=>{
+      setblog(parsed)
+    })
+  },[])
+  
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-          <div className={styles.blogItem}>
-           <Link href={'/blogpost/learn-javascript-in-2022'}>
-              <h3>How to learn JavaScript in 2022?</h3>
-           </Link>
-           <p>JavaScript is the language used to design logic for the web.</p>
-          </div>
-          <div className={styles.blogItem}>
-            <Link href={'/blogpost/learn-javascript-in-2022'}>
-              <h3 >How to learn JavaScript in 2022?</h3>
-           </Link>
-           <p>JavaScript is the language used to design logic for the web.</p>
-          </div>
-          <div className={styles.blogItem}>
-          <Link href={'/blogpost/learn-javascript-in-2022'}>
-              <h3 >How to learn JavaScript in 2022?</h3>
-           </Link>
-           <p>JavaScript is the language used to design logic for the web.</p>
-          </div>
+          {blog.map((newitem)=>(
+            <div key={newitem.slug} className={styles.blogItem}>
+            <Link href={`/blogpost/${newitem.slug}`}>
+               <h3>{newitem.title}</h3>
+            </Link>
+            <p className={styles.blogitemP}>{newitem.content}</p>
+           </div>
+          ))}
+          
     </main>
     </div>
   )
